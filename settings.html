@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | HCM Lite</title>
+  <script>try{var s=JSON.parse(localStorage.getItem("hcm_session"));if(!s||s.role!=="admin")location.replace("index.html")}catch(e){location.replace("index.html")}</script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/storage.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+  <script src="js/payroll.js" defer></script>
+  <script src="js/settings.js" defer></script>
+  <script src="js/password.js" defer></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="container">
+
+  <h1>Company Settings</h1>
+  <p class="subtitle">Office timing, leave rules, holidays and backup.</p>
+
+  <section class="card">
+    <h2>General</h2>
+    <form id="settingsForm">
+      <div class="form-grid">
+        <div><label for="setName">Company name</label><input id="setName" required></div>
+        <div><label for="setStart">Office start time</label><input id="setStart" type="time" required></div>
+        <div><label for="setGrace">Grace minutes</label><input id="setGrace" type="number" min="0"></div>
+        <div><label for="setQuota">Yearly leave quota (days)</label><input id="setQuota" type="number" min="0"></div>
+        <div><label for="setLates">Late rule: every N lates = 1 day deduction (0 = off)</label>
+          <input id="setLates" type="number" min="0"></div>
+      </div>
+      <label>Working days</label>
+      <div class="checks">
+        <label><input type="checkbox" name="wd" value="1">Mon</label>
+        <label><input type="checkbox" name="wd" value="2">Tue</label>
+        <label><input type="checkbox" name="wd" value="3">Wed</label>
+        <label><input type="checkbox" name="wd" value="4">Thu</label>
+        <label><input type="checkbox" name="wd" value="5">Fri</label>
+        <label><input type="checkbox" name="wd" value="6">Sat</label>
+        <label><input type="checkbox" name="wd" value="0">Sun</label>
+      </div>
+      <button type="submit">Save Settings</button>
+    </form>
+    <p id="settingsMessage" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Holidays</h2>
+    <form id="holidayForm" class="toolbar">
+      <div><label for="holDate">Date</label><input type="date" id="holDate" required></div>
+      <div><label for="holName">Holiday name</label><input id="holName" required></div>
+      <button type="submit" class="btn-leave">Add Holiday</button>
+    </form>
+    <p id="holidayMessage" role="status"></p>
+    <div id="holidayList"></div>
+  </section>
+
+  <section class="card">
+    <h2>Backup &amp; Restore</h2>
+    <p class="subtitle">All data is stored in this browser. Download a backup regularly.</p>
+    <div class="toolbar">
+      <button type="button" id="exportBtn">Download Backup</button>
+      <div><label for="importFile">Restore from backup file</label>
+        <input type="file" id="importFile" accept="application/json,.json"></div>
+    </div>
+    <p id="backupMessage" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Change Password</h2>
+    <form id="passwordForm" class="form-grid">
+      <div><label for="curPass">Current password</label>
+        <input id="curPass" type="password" required></div>
+      <div><label for="newPass">New password</label>
+        <input id="newPass" type="password" minlength="6" required></div>
+      <div><label for="newPass2">Confirm new password</label>
+        <input id="newPass2" type="password" minlength="6" required></div>
+      <div style="grid-column:1/-1"><button type="submit">Update Password</button></div>
+    </form>
+    <p id="passwordMessage" role="status"></p>
+  </section>
+</main>
+</body>
+</html>

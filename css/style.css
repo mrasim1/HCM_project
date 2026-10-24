@@ -1,0 +1,610 @@
+/* HCM Lite — black / white / gray theme */
+:root {
+  --bg: #f4f4f5;
+  --card: #ffffff;
+  --text: #18181b;
+  --muted: #71717a;
+  --line: #e4e4e7;
+  --ink: #18181b;
+  --ink-hover: #3f3f46;
+  --in: #bbf7d0;
+  --in-t: #14532d;
+  --in-h: #86efac;
+  --out: #fecaca;
+  --out-t: #7f1d1d;
+  --out-h: #fca5a5;
+  --leave: #fed7aa;
+  --leave-t: #7c2d12;
+  --leave-h: #fdba74;
+  --late: #fef08a;
+  --late-t: #713f12;
+  --radius: 14px;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+[hidden],
+.hidden {
+  display: none !important;
+}
+
+body {
+  font-family: system-ui, "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+.container.center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: clamp(24px, 4vw, 32px);
+  margin-bottom: 6px;
+}
+h2 {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+h3 {
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.card,
+.auth-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  width: 100%;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.auth-card {
+  max-width: 440px;
+  padding: 32px;
+}
+.logo {
+  width: 56px;
+  height: 56px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* Navigation */
+.nav {
+  background: var(--ink);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.nav-brand {
+  font-weight: 700;
+  flex: 1;
+}
+.nav-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.nav a {
+  color: #d4d4d8;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.nav a:hover,
+.nav a.active {
+  background: #3f3f46;
+  color: #fff;
+}
+.nav button {
+  margin: 0;
+  padding: 8px 14px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+}
+.nav button:hover {
+  background: #e4e4e7;
+}
+#navToggle {
+  display: none;
+  background: transparent;
+  color: #fff;
+  border: 1px solid #52525b;
+}
+
+/* Forms */
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 14px 0 6px;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d4d4d8;
+  border-radius: 9px;
+  font: inherit;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(24, 24, 27, 0.1);
+}
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 6px;
+}
+.form-grid {
+  display: grid;
+  gap: 0 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 4px;
+}
+.checks label {
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Buttons */
+button {
+  margin-top: 16px;
+  padding: 11px 18px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+button:hover {
+  background: var(--ink-hover);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border-color: #d4d4d8;
+}
+.btn-ghost:hover {
+  background: #f4f4f5;
+}
+.btn-in,
+#checkInBtn {
+  background: var(--in);
+  color: var(--in-t);
+}
+.btn-in:hover:not(:disabled),
+#checkInBtn:hover:not(:disabled) {
+  background: var(--in-h);
+}
+.btn-out,
+#checkOutBtn {
+  background: var(--out);
+  color: var(--out-t);
+}
+.btn-out:hover:not(:disabled),
+#checkOutBtn:hover:not(:disabled) {
+  background: var(--out-h);
+}
+.btn-leave,
+#leaveForm button {
+  background: var(--leave);
+  color: var(--leave-t);
+}
+.btn-leave:hover,
+#leaveForm button:hover {
+  background: var(--leave-h);
+}
+.attendance-actions {
+  display: flex;
+  gap: 12px;
+}
+.attendance-actions button {
+  flex: 1;
+  padding: 16px;
+  font-size: 17px;
+}
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.row-actions button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+p[role="status"] {
+  min-height: 1.2em;
+  margin-top: 10px;
+  color: var(--muted);
+}
+#message.error {
+  color: #b91c1c;
+}
+#message.success {
+  color: #15803d;
+}
+
+/* Stats */
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 18px;
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.stat span {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+.stat strong {
+  font-size: 28px;
+}
+.stat.s-in {
+  background: var(--in);
+  color: var(--in-t);
+}
+.stat.s-in span {
+  color: var(--in-t);
+}
+.stat.s-late {
+  background: var(--late);
+  color: var(--late-t);
+}
+.stat.s-late span {
+  color: var(--late-t);
+}
+.stat.s-leave {
+  background: var(--leave);
+  color: var(--leave-t);
+}
+.stat.s-leave span {
+  color: var(--leave-t);
+}
+
+/* Lists / rows */
+.emp-card,
+#leaveList section {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 12px;
+  background: #fafafa;
+}
+.rec {
+  padding: 10px 12px;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+  border-left: 5px solid #a1a1aa;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  background: #fff;
+}
+.rec.present {
+  border-left-color: #4ade80;
+  background: #f0fdf4;
+}
+.rec.late {
+  border-left-color: #facc15;
+  background: #fefce8;
+}
+.rec.half {
+  border-left-color: #a1a1aa;
+  background: #fafafa;
+}
+.rec.leave {
+  border-left-color: #fb923c;
+  background: #fff7ed;
+}
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+th {
+  background: #fafafa;
+  font-size: 13px;
+  color: var(--muted);
+}
+tfoot td {
+  font-weight: 700;
+  background: #fafafa;
+}
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #e4e4e7;
+  color: #3f3f46;
+}
+.tag-present {
+  background: var(--in);
+  color: var(--in-t);
+}
+.tag-late {
+  background: var(--late);
+  color: var(--late-t);
+}
+.tag-incomplete,
+.tag-absent {
+  background: var(--out);
+  color: var(--out-t);
+}
+.tag-leave {
+  background: var(--leave);
+  color: var(--leave-t);
+}
+.tag-paid {
+  background: var(--in);
+  color: var(--in-t);
+}
+.tag-pending {
+  background: var(--leave);
+  color: var(--leave-t);
+}
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.toolbar > div {
+  flex: 1;
+  min-width: 180px;
+}
+.toolbar button {
+  margin-top: 0;
+}
+
+/* Salary slip */
+.slip {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 16px;
+}
+.slip-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+.slip-head h3 {
+  font-size: 22px;
+  margin: 0;
+}
+.slip-title {
+  text-align: right;
+}
+.slip-title strong {
+  display: block;
+  letter-spacing: 2px;
+}
+.slip-info {
+  display: grid;
+  gap: 8px 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 16px;
+}
+.slip-info div span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.slip-cols {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.slip-cols h4 {
+  background: var(--ink);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.slip td {
+  white-space: normal;
+}
+.slip td:last-child {
+  text-align: right;
+}
+.slip-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.slip-net {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 18px;
+}
+.slip-net strong {
+  font-size: 26px;
+}
+.slip-pay {
+  border: 1px dashed #a1a1aa;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 16px;
+}
+.slip-sign {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 44px;
+}
+.slip-sign div {
+  border-top: 1px solid var(--ink);
+  padding-top: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+.slip-note {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  #navToggle {
+    display: block;
+    margin: 0;
+  }
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-links button {
+    width: 100%;
+  }
+  .card,
+  .auth-card {
+    padding: 16px;
+  }
+  .attendance-actions {
+    flex-direction: column;
+  }
+  .toolbar button,
+  .row-actions button {
+    width: 100%;
+  }
+  .slip {
+    padding: 14px;
+  }
+  .slip-title {
+    text-align: left;
+  }
+  .slip-sign {
+    gap: 16px;
+  }
+}
+
+/* Print only the slip */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .slip,
+  .slip * {
+    visibility: visible;
+  }
+  .slip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-color: #000;
+  }
+  .slip-net {
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+  }
+  .slip-cols h4 {
+    background: #fff;
+    color: #000;
+    border-bottom: 1px solid #000;
+  }
+}

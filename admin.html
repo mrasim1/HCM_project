@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | HCM Lite</title>
+  <script>try{var s=JSON.parse(localStorage.getItem("hcm_session"));if(!s||s.role!=="admin")location.replace("index.html")}catch(e){location.replace("index.html")}</script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/storage.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+  <script src="js/password.js" defer></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="container">
+
+  <h1 id="companyTitle">Admin Dashboard</h1>
+  <p class="subtitle">Manage employees and attendance.</p>
+
+  <section class="grid">
+    <div class="stat"><span>Total employees</span><strong id="employeeCount">0</strong></div>
+    <div class="stat s-in"><span>Checked in today</span><strong id="presentCount">0</strong></div>
+    <div class="stat s-late"><span>Late today</span><strong id="lateCount">0</strong></div>
+    <div class="stat s-leave"><span>On leave today</span><strong id="leaveCount">0</strong></div>
+  </section>
+
+  <section class="card">
+    <h2 id="formTitle">Add Employee</h2>
+    <form id="employeeForm">
+      <div class="form-grid">
+        <div><label for="empName">Full name</label>
+          <input id="empName" required></div>
+        <div><label for="empEmail">Email</label>
+          <input id="empEmail" type="email" required></div>
+        <div><label for="empPassword">Initial password</label>
+          <input id="empPassword" type="password" minlength="6" required></div>
+        <div><label for="empDepartment">Department</label>
+          <input id="empDepartment" required></div>
+        <div><label for="empSalary">Monthly salary (PKR)</label>
+          <input id="empSalary" type="number" min="1" required></div>
+        <div><label for="empPayMethod">Salary payment method</label>
+          <select id="empPayMethod">
+            <option value="bank">Bank account transfer</option>
+            <option value="cheque">Cheque collection from company</option>
+          </select></div>
+      </div>
+      <div id="bankFields" class="form-grid">
+        <div><label for="empBank">Bank name</label>
+          <input id="empBank" placeholder="e.g. HBL"></div>
+        <div><label for="empAccount">Account number / IBAN</label>
+          <input id="empAccount"></div>
+      </div>
+      <div class="row-actions">
+        <button type="submit" id="empSubmit">Add Employee</button>
+        <button type="button" id="cancelEdit" class="btn-ghost" hidden>Cancel edit</button>
+      </div>
+    </form>
+    <p id="adminMessage" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Employee Directory</h2>
+    <label for="employeeSearch">Search employees</label>
+    <input id="employeeSearch" placeholder="Search by name, email or department">
+    <div id="employeeList"></div>
+  </section>
+
+  <section class="card">
+    <h2>Smart Helper</h2>
+    <form id="helperForm">
+      <label for="helperQuestion">Ask a question</label>
+      <input id="helperQuestion" required placeholder="How many employees do we have?">
+      <button type="submit">Ask Helper</button>
+    </form>
+    <p id="helperAnswer" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2>Change Password</h2>
+    <form id="passwordForm" class="form-grid">
+      <div><label for="curPass">Current password</label>
+        <input id="curPass" type="password" required></div>
+      <div><label for="newPass">New password</label>
+        <input id="newPass" type="password" minlength="6" required></div>
+      <div><label for="newPass2">Confirm new password</label>
+        <input id="newPass2" type="password" minlength="6" required></div>
+      <div style="grid-column:1/-1"><button type="submit">Update Password</button></div>
+    </form>
+    <p id="passwordMessage" role="status"></p>
+  </section>
+</main>
+</body>
+</html>

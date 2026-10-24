@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCM Lite | HR Management</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="container center">
+    <section class="auth-card">
+      <div class="logo">HCM</div>
+      <h1>HCM Lite</h1>
+      <p class="subtitle">Human Capital Management System</p>
+
+      <form id="setupForm" class="hidden">
+        <h2>First-time Company Setup</h2>
+
+        <label for="companyName">Company name</label>
+        <input id="companyName" required placeholder="Enter company name">
+
+        <label for="adminName">Admin full name</label>
+        <input id="adminName" required placeholder="Enter your name">
+
+        <label for="adminEmail">Admin email</label>
+        <input id="adminEmail" type="email" required placeholder="admin@example.com">
+
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" minlength="6" required>
+
+        <button type="submit">Create Company</button>
+      </form>
+
+      <form id="loginForm" class="hidden">
+        <h2>Welcome Back</h2>
+
+        <label for="email">Email address</label>
+        <input id="email" type="email" required placeholder="Enter email">
+
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="Enter password">
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p id="message" role="status"></p>
+    </section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
