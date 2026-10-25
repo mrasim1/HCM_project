@@ -1,4 +1,3 @@
-
 (() => {
   const users = () => Storage.get("hcm_users", []);
   const leaves = () => Storage.get("hcm_leaves", []);
@@ -8,7 +7,7 @@
 
   function getUser() {
     if (!session) return null;
-    return users().find(user => user.id === session.userId) || null;
+    return users().find((user) => user.id === session.userId) || null;
   }
 
   function today() {
@@ -24,14 +23,18 @@
     while (date <= end) {
       const day = date.getDay();
 
-      const key = date.getFullYear() + "-" +
-        String(date.getMonth() + 1).padStart(2, "0") + "-" +
+      const key =
+        date.getFullYear() +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
         String(date.getDate()).padStart(2, "0");
 
       if (
         (company.workingDays || [1, 2, 3, 4, 5]).includes(day) &&
-        !Storage.get("hcm_holidays", []).some(h => h.date === key)
-      ) count++;
+        !Storage.get("hcm_holidays", []).some((h) => h.date === key)
+      )
+        count++;
 
       date.setDate(date.getDate() + 1);
     }
@@ -40,19 +43,19 @@
   }
 
   function overlaps(from, to, existing) {
-    return existing.some(item =>
-      item.status !== "rejected" &&
-      from <= item.to &&
-      to >= item.from
+    return existing.some(
+      (item) =>
+        item.status !== "rejected" && from <= item.to && to >= item.from,
     );
   }
 
   function approvedDays(employeeId, excludeId = null) {
     return leaves()
-      .filter(item =>
-        item.employeeId === employeeId &&
-        item.status === "approved" &&
-        item.id !== excludeId
+      .filter(
+        (item) =>
+          item.employeeId === employeeId &&
+          item.status === "approved" &&
+          item.id !== excludeId,
       )
       .reduce((sum, item) => sum + item.days, 0);
   }
@@ -78,13 +81,13 @@
     const myLeaves = document.getElementById("myLeaves");
 
     function renderMyLeaves() {
-      const ownLeaves = leaves().filter(
-        item => item.employeeId === user.id
-      );
+      const ownLeaves = leaves().filter((item) => item.employeeId === user.id);
 
       const quota = Number(company.leaveQuota ?? 20);
       const used = ownLeaves
-        .filter(item => item.status === "approved" || item.status === "pending")
+        .filter(
+          (item) => item.status === "approved" || item.status === "pending",
+        )
         .reduce((sum, item) => sum + item.days, 0);
 
       balance.textContent = Math.max(0, quota - used) + " days";
@@ -95,19 +98,22 @@
         return;
       }
 
-      ownLeaves.slice().reverse().forEach(item => {
-        const row = document.createElement("p");
-        row.textContent =
-          `${item.type}: ${item.from} to ${item.to} ` +
-          `(${item.days} working days) — ${item.status}` +
-          (item.comment ? ` | Admin: ${item.comment}` : "");
+      ownLeaves
+        .slice()
+        .reverse()
+        .forEach((item) => {
+          const row = document.createElement("p");
+          row.textContent =
+            `${item.type}: ${item.from} to ${item.to} ` +
+            `(${item.days} working days) — ${item.status}` +
+            (item.comment ? ` | Admin: ${item.comment}` : "");
 
-        row.className = "rec leave";
-        myLeaves.appendChild(row);
-      });
+          row.className = "rec leave";
+          myLeaves.appendChild(row);
+        });
     }
 
-    leaveForm.addEventListener("submit", event => {
+    leaveForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const type = document.getElementById("leaveType").value;
@@ -139,13 +145,13 @@
 
       const currentLeaves = leaves();
       const ownLeaves = currentLeaves.filter(
-        item => item.employeeId === user.id
+        (item) => item.employeeId === user.id,
       );
 
       if (overlaps(from, to, ownLeaves)) {
         showError(
           message,
-          "These dates overlap an existing pending or approved leave."
+          "These dates overlap an existing pending or approved leave.",
         );
         return;
       }
@@ -153,7 +159,9 @@
       const quota = Number(company.leaveQuota ?? 20);
 
       const reservedDays = ownLeaves
-        .filter(item => item.status === "approved" || item.status === "pending")
+        .filter(
+          (item) => item.status === "approved" || item.status === "pending",
+        )
         .reduce((sum, item) => sum + item.days, 0);
 
       if (reservedDays + days > quota) {
@@ -170,7 +178,7 @@
         days,
         reason,
         status: "pending",
-        comment: ""
+        comment: "",
       });
 
       Storage.set("hcm_leaves", currentLeaves);
@@ -208,10 +216,8 @@
         return;
       }
 
-      requests.forEach(item => {
-        const employee = users().find(
-          user => user.id === item.employeeId
-        );
+      requests.forEach((item) => {
+        const employee = users().find((user) => user.id === item.employeeId);
 
         const card = document.createElement("section");
         card.style.cssText =
@@ -224,8 +230,7 @@
           : "Unknown employee";
 
         const details = document.createElement("p");
-        details.textContent =
-          `${item.from} to ${item.to} | ${item.days} working days`;
+        details.textContent = `${item.from} to ${item.to} | ${item.days} working days`;
 
         const reason = document.createElement("p");
         reason.textContent = "Reason: " + item.reason;
@@ -259,9 +264,7 @@
 
           approveBtn.addEventListener("click", () => {
             const currentLeaves = leaves();
-            const request = currentLeaves.find(
-              entry => entry.id === item.id
-            );
+            const request = currentLeaves.find((entry) => entry.id === item.id);
 
             if (!request || request.status !== "pending") {
               renderRequests();
@@ -269,8 +272,9 @@
             }
 
             const employeeLeaves = currentLeaves.filter(
-              entry => entry.employeeId === request.employeeId &&
-                entry.id !== request.id
+              (entry) =>
+                entry.employeeId === request.employeeId &&
+                entry.id !== request.id,
             );
 
             if (overlaps(request.from, request.to, employeeLeaves)) {
@@ -282,8 +286,8 @@
             const quota = Number(company.leaveQuota ?? 20);
 
             if (
-              approvedDays(request.employeeId, request.id) +
-              request.days > quota
+              approvedDays(request.employeeId, request.id) + request.days >
+              quota
             ) {
               adminMessage.textContent =
                 "Cannot approve: the employee's leave quota is exceeded.";
@@ -301,9 +305,7 @@
 
           rejectBtn.addEventListener("click", () => {
             const currentLeaves = leaves();
-            const request = currentLeaves.find(
-              entry => entry.id === item.id
-            );
+            const request = currentLeaves.find((entry) => entry.id === item.id);
 
             if (!request || request.status !== "pending") {
               renderRequests();

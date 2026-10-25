@@ -1,27 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leave Management | HCM Lite</title>
-  <script>try{var s=JSON.parse(localStorage.getItem("hcm_session"));if(!s||s.role!=="admin")location.replace("index.html")}catch(e){location.replace("index.html")}</script>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/storage.js" defer></script>
-  <script src="js/nav.js" defer></script>
-  <script src="js/dashboard.js" defer></script>
-  <script src="js/leave.js" defer></script>
-</head>
-<body>
-<div id="nav"></div>
-<main class="container">
-
-  <h1>Leave Management</h1>
-  <p class="subtitle">Review employee leave applications.</p>
-  <section class="card">
-    <p id="leaveAdminMessage" role="status"></p>
-    <h2>All Leave Requests</h2>
-    <div id="leaveList"></div>
-  </section>
-</main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leave Management | HCM Lite</title>
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem("hcm_session"));
+        if (!s || s.role !== "admin") location.replace("index.html");
+      } catch (e) {
+        location.replace("index.html");
+      }
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/storage.js" defer></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
+    <script src="js/leave.js" defer></script>
+  </head>
+  <body>
+    <div id="nav"></div>
+    <main class="container">
+      <h1>Leave Management</h1>
+      <p class="subtitle">Review employee leave applications.</p>
+      <section class="card">
+        <p id="leaveAdminMessage" role="status"></p>
+        <h2>All Leave Requests</h2>
+        <div id="leaveList"></div>
+      </section>
+    </main>
+  </body>
 </html>

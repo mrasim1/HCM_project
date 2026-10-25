@@ -1,51 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reports | HCM Lite</title>
-  <script>try{var s=JSON.parse(localStorage.getItem("hcm_session"));if(!s||s.role!=="admin")location.replace("index.html")}catch(e){location.replace("index.html")}</script>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/storage.js" defer></script>
-  <script src="js/nav.js" defer></script>
-  <script src="js/dashboard.js" defer></script>
-  <script src="js/payroll.js" defer></script>
-  <script src="js/reports.js" defer></script>
-</head>
-<body>
-<div id="nav"></div>
-<main class="container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports | HCM Lite</title>
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem("hcm_session"));
+        if (!s || s.role !== "admin") location.replace("index.html");
+      } catch (e) {
+        location.replace("index.html");
+      }
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/storage.js" defer></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
+    <script src="js/payroll.js" defer></script>
+    <script src="js/reports.js" defer></script>
+  </head>
+  <body>
+    <div id="nav"></div>
+    <main class="container">
+      <h1>Reports</h1>
+      <p class="subtitle">Payroll and attendance reports.</p>
 
-  <h1>Reports</h1>
-  <p class="subtitle">Payroll and attendance reports.</p>
+      <section class="card">
+        <h2>Payroll Report</h2>
+        <div class="toolbar">
+          <div>
+            <label for="payrollMonth">Month</label>
+            <input type="month" id="payrollMonth" />
+          </div>
+          <button type="button" id="payrollCsv" class="btn-ghost">
+            Download CSV
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="payrollHead"></thead>
+            <tbody id="payrollBody"></tbody>
+            <tfoot id="payrollFoot"></tfoot>
+          </table>
+        </div>
+        <p id="payrollEmpty" role="status"></p>
+        <div id="slipHost"></div>
+        <button type="button" id="printAdminSlip" hidden>
+          Print / Save selected slip as PDF
+        </button>
+      </section>
 
-  <section class="card">
-    <h2>Payroll Report</h2>
-    <div class="toolbar">
-      <div><label for="payrollMonth">Month</label>
-        <input type="month" id="payrollMonth"></div>
-      <button type="button" id="payrollCsv" class="btn-ghost">Download CSV</button>
-    </div>
-    <div class="table-wrap">
-      <table><thead id="payrollHead"></thead><tbody id="payrollBody"></tbody><tfoot id="payrollFoot"></tfoot></table>
-    </div>
-    <p id="payrollEmpty" role="status"></p>
-    <div id="slipHost"></div>
-    <button type="button" id="printAdminSlip" hidden>Print / Save selected slip as PDF</button>
-  </section>
-
-  <section class="card">
-    <h2>Daily Attendance Report</h2>
-    <div class="toolbar">
-      <div><label for="attDate">Date</label>
-        <input type="date" id="attDate"></div>
-      <button type="button" id="attCsv" class="btn-ghost">Download CSV</button>
-    </div>
-    <p id="attSummary" role="status"></p>
-    <div class="table-wrap">
-      <table><thead id="attHead"></thead><tbody id="attBody"></tbody></table>
-    </div>
-  </section>
-</main>
-</body>
+      <section class="card">
+        <h2>Daily Attendance Report</h2>
+        <div class="toolbar">
+          <div>
+            <label for="attDate">Date</label> <input type="date" id="attDate" />
+          </div>
+          <button type="button" id="attCsv" class="btn-ghost">
+            Download CSV
+          </button>
+        </div>
+        <p id="attSummary" role="status"></p>
+        <div class="table-wrap">
+          <table>
+            <thead id="attHead"></thead>
+            <tbody id="attBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

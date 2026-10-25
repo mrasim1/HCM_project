@@ -1,101 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Portal | HCM Lite</title>
-  <script>try{var s=JSON.parse(localStorage.getItem("hcm_session"));if(!s||s.role!=="employee")location.replace("index.html")}catch(e){location.replace("index.html")}</script>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/storage.js" defer></script>
-  <script src="js/nav.js" defer></script>
-  <script src="js/dashboard.js" defer></script>
-  <script src="js/payroll.js" defer></script>
-  <script src="js/employee.js" defer></script>
-  <script src="js/leave.js" defer></script>
-  <script src="js/salary.js" defer></script>
-  <script src="js/password.js" defer></script>
-</head>
-<body>
-<div id="nav"></div>
-<main class="container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Portal | HCM Lite</title>
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem("hcm_session"));
+        if (!s || s.role !== "employee") location.replace("index.html");
+      } catch (e) {
+        location.replace("index.html");
+      }
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/storage.js" defer></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
+    <script src="js/payroll.js" defer></script>
+    <script src="js/employee.js" defer></script>
+    <script src="js/leave.js" defer></script>
+    <script src="js/salary.js" defer></script>
+    <script src="js/password.js" defer></script>
+  </head>
+  <body>
+    <div id="nav"></div>
+    <main class="container">
+      <h1 id="employeeTitle">Employee Portal</h1>
+      <p class="subtitle">Your attendance and self-service dashboard.</p>
 
-  <h1 id="employeeTitle">Employee Portal</h1>
-  <p class="subtitle">Your attendance and self-service dashboard.</p>
+      <section class="card">
+        <h2>Today's Attendance</h2>
+        <p id="attendanceStatus">You have not checked in today.</p>
+        <div class="attendance-actions">
+          <button type="button" id="checkInBtn">Check In</button>
+          <button type="button" id="checkOutBtn">Check Out</button>
+        </div>
+      </section>
 
-  <section class="card">
-    <h2>Today's Attendance</h2>
-    <p id="attendanceStatus">You have not checked in today.</p>
-    <div class="attendance-actions">
-      <button type="button" id="checkInBtn">Check In</button>
-      <button type="button" id="checkOutBtn">Check Out</button>
-    </div>
-  </section>
+      <section class="card">
+        <h2>My Attendance History</h2>
+        <div id="myAttendance"></div>
+      </section>
 
-  <section class="card">
-    <h2>My Attendance History</h2>
-    <div id="myAttendance"></div>
-  </section>
+      <section class="card">
+        <h2>Apply for Leave</h2>
+        <p>
+          Remaining leave days: <strong id="leaveBalance">Loading...</strong>
+        </p>
+        <form id="leaveForm">
+          <div class="form-grid">
+            <div>
+              <label for="leaveType">Leave type</label>
+              <select id="leaveType" required>
+                <option value="">Select leave type</option>
+                <option value="Casual">Casual Leave</option>
+                <option value="Sick">Sick Leave</option>
+                <option value="Annual">Annual Leave</option>
+              </select>
+            </div>
+            <div>
+              <label for="leaveFrom">From date</label>
+              <input type="date" id="leaveFrom" required />
+            </div>
+            <div>
+              <label for="leaveTo">To date</label>
+              <input type="date" id="leaveTo" required />
+            </div>
+          </div>
+          <label for="leaveReason">Reason</label>
+          <textarea
+            id="leaveReason"
+            required
+            placeholder="Explain your reason for leave"
+          ></textarea>
+          <button type="submit">Submit Leave Request</button>
+        </form>
+        <p id="leaveMessage" role="status"></p>
+        <h3>My Leave Requests</h3>
+        <div id="myLeaves"></div>
+      </section>
 
-  <section class="card">
-    <h2>Apply for Leave</h2>
-    <p>Remaining leave days: <strong id="leaveBalance">Loading...</strong></p>
-    <form id="leaveForm">
-      <div class="form-grid">
-        <div><label for="leaveType">Leave type</label>
-          <select id="leaveType" required>
-            <option value="">Select leave type</option>
-            <option value="Casual">Casual Leave</option>
-            <option value="Sick">Sick Leave</option>
-            <option value="Annual">Annual Leave</option>
-          </select></div>
-        <div><label for="leaveFrom">From date</label>
-          <input type="date" id="leaveFrom" required></div>
-        <div><label for="leaveTo">To date</label>
-          <input type="date" id="leaveTo" required></div>
-      </div>
-      <label for="leaveReason">Reason</label>
-      <textarea id="leaveReason" required placeholder="Explain your reason for leave"></textarea>
-      <button type="submit">Submit Leave Request</button>
-    </form>
-    <p id="leaveMessage" role="status"></p>
-    <h3>My Leave Requests</h3>
-    <div id="myLeaves"></div>
-  </section>
+      <section class="card">
+        <h2>Salary Slip</h2>
+        <form id="salaryForm" class="toolbar">
+          <div>
+            <label for="slipMonth">Select month</label>
+            <input type="month" id="slipMonth" required />
+          </div>
+          <button type="submit">Generate Salary Slip</button>
+        </form>
+        <div id="salarySlip"></div>
+        <button type="button" id="printSlipBtn" hidden>
+          Print / Save as PDF
+        </button>
+      </section>
 
-  <section class="card">
-    <h2>Salary Slip</h2>
-    <form id="salaryForm" class="toolbar">
-      <div><label for="slipMonth">Select month</label>
-        <input type="month" id="slipMonth" required></div>
-      <button type="submit">Generate Salary Slip</button>
-    </form>
-    <div id="salarySlip"></div>
-    <button type="button" id="printSlipBtn" hidden>Print / Save as PDF</button>
-  </section>
+      <section class="card">
+        <h2>Smart Helper</h2>
+        <form id="employeeHelperForm">
+          <label for="employeeQuestion">Ask a question</label>
+          <input
+            id="employeeQuestion"
+            required
+            placeholder="Was I late today?"
+          />
+          <button type="submit">Ask Helper</button>
+        </form>
+        <p id="employeeAnswer" role="status"></p>
+      </section>
 
-  <section class="card">
-    <h2>Smart Helper</h2>
-    <form id="employeeHelperForm">
-      <label for="employeeQuestion">Ask a question</label>
-      <input id="employeeQuestion" required placeholder="Was I late today?">
-      <button type="submit">Ask Helper</button>
-    </form>
-    <p id="employeeAnswer" role="status"></p>
-  </section>
-
-  <section class="card">
-    <h2>Change Password</h2>
-    <form id="passwordForm" class="form-grid">
-      <div><label for="curPass">Current password</label>
-        <input id="curPass" type="password" required></div>
-      <div><label for="newPass">New password</label>
-        <input id="newPass" type="password" minlength="6" required></div>
-      <div><label for="newPass2">Confirm new password</label>
-        <input id="newPass2" type="password" minlength="6" required></div>
-      <div style="grid-column:1/-1"><button type="submit">Update Password</button></div>
-    </form>
-    <p id="passwordMessage" role="status"></p>
-  </section>
-</main>
-</body>
+      <section class="card">
+        <h2>Change Password</h2>
+        <form id="passwordForm" class="form-grid">
+          <div>
+            <label for="curPass">Current password</label>
+            <input id="curPass" type="password" required />
+          </div>
+          <div>
+            <label for="newPass">New password</label>
+            <input id="newPass" type="password" minlength="6" required />
+          </div>
+          <div>
+            <label for="newPass2">Confirm new password</label>
+            <input id="newPass2" type="password" minlength="6" required />
+          </div>
+          <div style="grid-column: 1/-1">
+            <button type="submit">Update Password</button>
+          </div>
+        </form>
+        <p id="passwordMessage" role="status"></p>
+      </section>
+    </main>
+  </body>
 </html>

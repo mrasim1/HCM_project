@@ -7,25 +7,28 @@ A lightweight, browser-based HR system for small companies. It handles employees
 ## Features
 
 ### Admin
+
 - **Dashboard:** total employees, checked in today, late today, on leave today.
 - **Employee management:** add, edit, delete and search employees.
 - **Payment details per employee:** bank account transfer (bank name and account number) or cheque collection from the company.
 - **Leave management:** approve or reject requests with an optional comment.
 - **Reports:**
-  - Payroll report for any month, with totals, CSV download, printable slips and a *Mark paid / Undo paid* button.
+  - Payroll report for any month, with totals, CSV download, printable slips and a _Mark paid / Undo paid_ button.
   - Daily attendance report with CSV download.
 - **Settings:** company name, office start time, grace minutes, yearly leave quota, working days, late-deduction rule, holidays.
 - **Backup and restore:** download all data as a JSON file and restore it later.
 - **Smart Helper:** answers simple questions such as "how many employees?", "who is late?", "who is on leave today?".
 
 ### Employee
-- **Check in / check out** with automatic *present*, *late* and *half day* status.
+
+- **Check in / check out** with automatic _present_, _late_ and _half day_ status.
 - **Attendance history.**
 - **Leave application** with a live remaining-balance display and a list of own requests.
 - **Salary slip** for any month, printable or saveable as PDF.
 - **Smart Helper:** "Was I late today?", "How many hours this week?".
 
 ### Both roles
+
 - Change password.
 - Login protection: opening a protected page without logging in, or with the wrong role, redirects to the login page. A logged-in user opening the login page is sent straight to their dashboard.
 - Responsive layout for mobile, tablet and desktop.
@@ -36,12 +39,12 @@ A lightweight, browser-based HR system for small companies. It handles employees
 
 Black, white and gray, with status colours:
 
-| Meaning | Colour |
-|---|---|
-| Check in / present / approve | Light green |
-| Check out / absent / reject | Light red |
-| Leave / pending | Light orange |
-| Late | Light yellow |
+| Meaning                      | Colour       |
+| ---------------------------- | ------------ |
+| Check in / present / approve | Light green  |
+| Check out / absent / reject  | Light red    |
+| Leave / pending              | Light orange |
+| Late                         | Light yellow |
 
 ---
 
@@ -82,7 +85,7 @@ cd HCM_fixed
 python -m http.server 8000
 ```
 
-Then open **http://localhost:8000** in your browser. (VS Code users can use the *Live Server* extension instead.)
+Then open **http://localhost:8000** in your browser. (VS Code users can use the _Live Server_ extension instead.)
 
 ---
 
@@ -102,17 +105,20 @@ To test the employee portal, log out of the admin account, then log in with an e
 ## Business rules
 
 ### Attendance
-- **Late:** check-in after *office start time + grace minutes*.
+
+- **Late:** check-in after _office start time + grace minutes_.
 - **Half day:** checking out after fewer than 5 hours of work.
 - One attendance record per employee per day.
 
 ### Leave
+
 - Leave is counted in **working days** only. Non-working days and holidays are skipped.
 - Past dates cannot be requested, and overlapping requests are blocked.
 - Pending and approved days both count against the quota. The remaining balance shown to the employee uses the same rule.
 - The admin cannot approve a request that would exceed the quota or overlap another leave.
 
 ### Salary
+
 For a selected month:
 
 ```
@@ -120,25 +126,26 @@ Per-day rate    = monthly salary ÷ working days in that month
 Net salary      = monthly salary − deductions
 ```
 
-| Day type | Effect on salary |
-|---|---|
-| Present | Full pay |
-| Late | Full pay (see late rule below) |
-| Half day (checked out under 5 hours) | Half a day deducted |
-| Checked in but never checked out (past day) | Half a day deducted |
-| Approved leave | Paid, no deduction |
-| No check-in and no leave | Full day deducted |
-| Before the employee's joining date | Deducted (unpaid) |
-| Holidays and non-working days | Not counted |
-| Future days of the current month | Counted as paid until attendance is recorded |
+| Day type                                    | Effect on salary                             |
+| ------------------------------------------- | -------------------------------------------- |
+| Present                                     | Full pay                                     |
+| Late                                        | Full pay (see late rule below)               |
+| Half day (checked out under 5 hours)        | Half a day deducted                          |
+| Checked in but never checked out (past day) | Half a day deducted                          |
+| Approved leave                              | Paid, no deduction                           |
+| No check-in and no leave                    | Full day deducted                            |
+| Before the employee's joining date          | Deducted (unpaid)                            |
+| Holidays and non-working days               | Not counted                                  |
+| Future days of the current month            | Counted as paid until attendance is recorded |
 
-**Late rule (optional, in Settings):** every *N* late days deduct one day's pay. Set it to 0 to turn it off.
+**Late rule (optional, in Settings):** every _N_ late days deduct one day's pay. Set it to 0 to turn it off.
 
 ### Salary slip and payment
+
 - The slip shows company name, employee details, earnings, deductions, attendance summary, net salary, payment details and signature lines.
 - **Bank transfer:** the slip shows the bank name and account number.
 - **Cheque collection:** the slip tells the employee to collect the cheque from the company accounts office and has a "Received by" signature line.
-- Status shows **PENDING** until the admin clicks *Mark paid* in Reports, after which it shows **PAID on [date]**.
+- Status shows **PENDING** until the admin clicks _Mark paid_ in Reports, after which it shows **PAID on [date]**.
 - Printing from the browser prints only the slip.
 
 ---
@@ -147,17 +154,17 @@ Net salary      = monthly salary − deductions
 
 Everything is saved in the browser under these `localStorage` keys:
 
-| Key | Contents |
-|---|---|
-| `hcm_company` | Company settings |
-| `hcm_users` | Admin and employees (passwords stored as hashes) |
-| `hcm_attendance` | Check-in / check-out records |
-| `hcm_leaves` | Leave requests |
-| `hcm_holidays` | Holiday list |
-| `hcm_payments` | Paid records per employee per month |
-| `hcm_session` | Currently logged-in user (not included in backups) |
+| Key              | Contents                                           |
+| ---------------- | -------------------------------------------------- |
+| `hcm_company`    | Company settings                                   |
+| `hcm_users`      | Admin and employees (passwords stored as hashes)   |
+| `hcm_attendance` | Check-in / check-out records                       |
+| `hcm_leaves`     | Leave requests                                     |
+| `hcm_holidays`   | Holiday list                                       |
+| `hcm_payments`   | Paid records per employee per month                |
+| `hcm_session`    | Currently logged-in user (not included in backups) |
 
-Because data lives in one browser on one device, **download a backup regularly** from *Settings → Backup & Restore*. Clearing browser data erases the system.
+Because data lives in one browser on one device, **download a backup regularly** from _Settings → Backup & Restore_. Clearing browser data erases the system.
 
 ---
 
@@ -170,13 +177,13 @@ Because data lives in one browser on one device, **download a backup regularly**
 
 ## Troubleshooting
 
-| Problem | Fix |
-|---|---|
-| Redirected to login again and again | You are not logged in, or opened a page for the wrong role. Log in with the correct account. |
-| Data is missing on another page | Open the app through a local server (`http://localhost`), not `file://`. |
-| Forgot admin password | Restore a backup, or clear the site's data in the browser and run first-time setup again. |
-| A new employee's salary looks low | Days before the joining date are treated as unpaid. Check a later month, or see the "Before joining" line on the slip. |
-| Slip shows too many absents | The employee did not check in on those working days, and had no approved leave. Check the Daily Attendance report. |
+| Problem                             | Fix                                                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Redirected to login again and again | You are not logged in, or opened a page for the wrong role. Log in with the correct account.                           |
+| Data is missing on another page     | Open the app through a local server (`http://localhost`), not `file://`.                                               |
+| Forgot admin password               | Restore a backup, or clear the site's data in the browser and run first-time setup again.                              |
+| A new employee's salary looks low   | Days before the joining date are treated as unpaid. Check a later month, or see the "Before joining" line on the slip. |
+| Slip shows too many absents         | The employee did not check in on those working days, and had no approved leave. Check the Daily Attendance report.     |
 
 ---
 

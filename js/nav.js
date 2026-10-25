@@ -4,10 +4,15 @@
   if (!host || !session) return;
 
   const company = Storage.get("hcm_company", { name: "HCM Lite" });
-  const links = session.role === "admin"
-    ? [["Dashboard", "admin.html"], ["Leaves", "leaves.html"],
-       ["Reports", "reports.html"], ["Settings", "settings.html"]]
-    : [["My Portal", "employee.html"]];
+  const links =
+    session.role === "admin"
+      ? [
+          ["Dashboard", "admin.html"],
+          ["Leaves", "leaves.html"],
+          ["Reports", "reports.html"],
+          ["Settings", "settings.html"],
+        ]
+      : [["My Portal", "employee.html"]];
 
   const bar = document.createElement("header");
   bar.className = "nav";

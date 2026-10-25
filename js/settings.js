@@ -2,7 +2,7 @@
   const form = document.getElementById("settingsForm");
   if (!form || !requireRole("admin")) return;
 
-  const $ = id => document.getElementById(id);
+  const $ = (id) => document.getElementById(id);
   const company = Storage.get("hcm_company", {});
 
   $("setName").value = company.name || "";
@@ -12,15 +12,16 @@
   $("setLates").value = company.latesPerDeduction ?? 0;
 
   const workDays = company.workingDays || [1, 2, 3, 4, 5];
-  document.querySelectorAll("input[name=wd]").forEach(box => {
+  document.querySelectorAll("input[name=wd]").forEach((box) => {
     box.checked = workDays.includes(Number(box.value));
   });
 
-  form.addEventListener("submit", event => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const days = [...document.querySelectorAll("input[name=wd]:checked")]
-      .map(box => Number(box.value));
+    const days = [...document.querySelectorAll("input[name=wd]:checked")].map(
+      (box) => Number(box.value),
+    );
 
     if (days.length === 0) {
       $("settingsMessage").textContent = "Select at least one working day.";
@@ -34,7 +35,7 @@
       graceMinutes: Number($("setGrace").value) || 0,
       leaveQuota: Number($("setQuota").value) || 0,
       latesPerDeduction: Number($("setLates").value) || 0,
-      workingDays: days
+      workingDays: days,
     });
 
     $("settingsMessage").textContent = "Settings saved.";
@@ -45,7 +46,8 @@
 
   function renderHolidays() {
     const holidays = Storage.get("hcm_holidays", [])
-      .slice().sort((a, b) => a.date.localeCompare(b.date));
+      .slice()
+      .sort((a, b) => a.date.localeCompare(b.date));
 
     list.replaceChildren();
     if (holidays.length === 0) {
@@ -53,7 +55,7 @@
       return;
     }
 
-    holidays.forEach(h => {
+    holidays.forEach((h) => {
       const row = document.createElement("div");
       row.className = "rec leave";
       row.textContent = `${h.date} — ${h.name} `;
@@ -64,8 +66,10 @@
       del.textContent = "Remove";
       del.style.cssText = "margin:0 0 0 10px;padding:4px 10px;font-size:13px";
       del.addEventListener("click", () => {
-        Storage.set("hcm_holidays",
-          Storage.get("hcm_holidays", []).filter(x => x.date !== h.date));
+        Storage.set(
+          "hcm_holidays",
+          Storage.get("hcm_holidays", []).filter((x) => x.date !== h.date),
+        );
         renderHolidays();
       });
 
@@ -74,14 +78,14 @@
     });
   }
 
-  $("holidayForm").addEventListener("submit", event => {
+  $("holidayForm").addEventListener("submit", (event) => {
     event.preventDefault();
     const date = $("holDate").value;
     const name = $("holName").value.trim();
     const holidays = Storage.get("hcm_holidays", []);
 
     if (!date || !name) return;
-    if (holidays.some(h => h.date === date)) {
+    if (holidays.some((h) => h.date === date)) {
       $("holidayMessage").textContent = "That date is already a holiday.";
       return;
     }
@@ -97,12 +101,13 @@
   $("exportBtn").addEventListener("click", () => {
     const data = {};
     Object.keys(localStorage)
-      .filter(key => key.startsWith("hcm_") && key !== "hcm_session")
-      .forEach(key => data[key] = Storage.get(key));
+      .filter((key) => key.startsWith("hcm_") && key !== "hcm_session")
+      .forEach((key) => (data[key] = Storage.get(key)));
 
     const a = document.createElement("a");
     a.href = URL.createObjectURL(
-      new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
+      new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }),
+    );
     a.download = "hcm-backup-" + Payroll.fmtDate(new Date()) + ".json";
     document.body.append(a);
     a.click();
@@ -110,7 +115,7 @@
     $("backupMessage").textContent = "Backup downloaded.";
   });
 
-  $("importFile").addEventListener("change", event => {
+  $("importFile").addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -125,8 +130,8 @@
         if (!confirm("This will replace ALL current data. Continue?")) return;
 
         Object.keys(data)
-          .filter(key => key.startsWith("hcm_") && key !== "hcm_session")
-          .forEach(key => Storage.set(key, data[key]));
+          .filter((key) => key.startsWith("hcm_") && key !== "hcm_session")
+          .forEach((key) => Storage.set(key, data[key]));
 
         $("backupMessage").textContent = "Backup restored. Reloading...";
         setTimeout(() => location.reload(), 800);

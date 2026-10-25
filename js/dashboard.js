@@ -8,9 +8,7 @@ function requireRole(role) {
     return false;
   }
 
-  const currentUser = allUsers.find(
-    user => user.id === session.userId
-  );
+  const currentUser = allUsers.find((user) => user.id === session.userId);
 
   if (!currentUser) {
     Storage.remove("hcm_session");
@@ -43,7 +41,7 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
   const employeeList = document.getElementById("employeeList");
   const adminMessage = document.getElementById("adminMessage");
   const searchInput = document.getElementById("employeeSearch");
-  const $ = id => document.getElementById(id);
+  const $ = (id) => document.getElementById(id);
 
   let editId = null;
 
@@ -65,16 +63,18 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
   });
 
   function getEmployees() {
-    return Storage.get("hcm_users", [])
-      .filter(user => user.role === "employee");
+    return Storage.get("hcm_users", []).filter(
+      (user) => user.role === "employee",
+    );
   }
 
   function renderEmployees(search = "") {
     const query = search.toLowerCase();
 
-    const employees = getEmployees().filter(user =>
-      [user.name, user.email, user.department]
-        .some(value => value.toLowerCase().includes(query))
+    const employees = getEmployees().filter((user) =>
+      [user.name, user.email, user.department].some((value) =>
+        value.toLowerCase().includes(query),
+      ),
     );
 
     employeeList.replaceChildren();
@@ -84,7 +84,7 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
       return;
     }
 
-    employees.forEach(employee => {
+    employees.forEach((employee) => {
       const card = document.createElement("div");
       card.className = "emp-card";
 
@@ -93,14 +93,21 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
 
       const details = document.createElement("p");
       details.textContent =
-        employee.email + " · " + employee.department +
-        " · PKR " + employee.salary;
+        employee.email +
+        " · " +
+        employee.department +
+        " · PKR " +
+        employee.salary;
 
       const pay = document.createElement("p");
       pay.style.color = "#71717a";
-      pay.textContent = employee.payMethod === "bank"
-        ? "Payment: Bank — " + (employee.bankName || "") + " " + (employee.accountNo || "")
-        : "Payment: Cheque collection from company";
+      pay.textContent =
+        employee.payMethod === "bank"
+          ? "Payment: Bank — " +
+            (employee.bankName || "") +
+            " " +
+            (employee.accountNo || "")
+          : "Payment: Cheque collection from company";
 
       const actions = document.createElement("div");
       actions.className = "row-actions";
@@ -117,7 +124,8 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
         $("empPassword").value = "";
         $("empDepartment").value = employee.department;
         $("empSalary").value = employee.salary;
-        $("empPayMethod").value = employee.payMethod || (employee.accountNo ? "bank" : "cheque");
+        $("empPayMethod").value =
+          employee.payMethod || (employee.accountNo ? "bank" : "cheque");
         $("empBank").value = employee.bankName || "";
         $("empAccount").value = employee.accountNo || "";
         setMode();
@@ -135,29 +143,29 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
         Storage.set(
           "hcm_users",
           Storage.get("hcm_users", []).filter(
-            user => user.id !== employee.id
-          )
+            (user) => user.id !== employee.id,
+          ),
         );
 
         Storage.set(
           "hcm_attendance",
           Storage.get("hcm_attendance", []).filter(
-            record => record.employeeId !== employee.id
-          )
+            (record) => record.employeeId !== employee.id,
+          ),
         );
 
         Storage.set(
           "hcm_leaves",
           Storage.get("hcm_leaves", []).filter(
-            leave => leave.employeeId !== employee.id
-          )
+            (leave) => leave.employeeId !== employee.id,
+          ),
         );
 
         Storage.set(
           "hcm_payments",
           Storage.get("hcm_payments", []).filter(
-            payment => payment.employeeId !== employee.id
-          )
+            (payment) => payment.employeeId !== employee.id,
+          ),
         );
 
         renderEmployees(searchInput.value);
@@ -173,28 +181,29 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
 
   function updateStats() {
     const employees = getEmployees();
-    const records = Storage.get("hcm_attendance", [])
-      .filter(record => record.date === today);
-
-    const onLeave = Storage.get("hcm_leaves", []).filter(leave =>
-      leave.status === "approved" &&
-      leave.from <= today &&
-      leave.to >= today
+    const records = Storage.get("hcm_attendance", []).filter(
+      (record) => record.date === today,
     );
 
-    document.getElementById("employeeCount").textContent =
-      employees.length;
+    const onLeave = Storage.get("hcm_leaves", []).filter(
+      (leave) =>
+        leave.status === "approved" && leave.from <= today && leave.to >= today,
+    );
 
-    document.getElementById("presentCount").textContent =
-      records.filter(record => record.checkIn).length;
+    document.getElementById("employeeCount").textContent = employees.length;
 
-    document.getElementById("lateCount").textContent =
-      records.filter(record => record.status === "late" || record.late).length;
+    document.getElementById("presentCount").textContent = records.filter(
+      (record) => record.checkIn,
+    ).length;
+
+    document.getElementById("lateCount").textContent = records.filter(
+      (record) => record.status === "late" || record.late,
+    ).length;
 
     document.getElementById("leaveCount").textContent = onLeave.length;
   }
 
-  employeeForm.addEventListener("submit", event => {
+  employeeForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const name = $("empName").value.trim();
@@ -208,29 +217,41 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
 
     const users = Storage.get("hcm_users", []);
 
-    if (users.some(user => user.email === email && user.id !== editId)) {
+    if (users.some((user) => user.email === email && user.id !== editId)) {
       adminMessage.textContent = "This email is already registered.";
       return;
     }
 
     if (
-      !name || !department || salary <= 0 ||
+      !name ||
+      !department ||
+      salary <= 0 ||
       (!editId && password.length < 6) ||
       (password && password.length < 6)
     ) {
-      adminMessage.textContent = "Please check all fields (password needs 6+ characters).";
+      adminMessage.textContent =
+        "Please check all fields (password needs 6+ characters).";
       return;
     }
 
     if (payMethod === "bank" && (!bankName || !accountNo)) {
-      adminMessage.textContent = "Please enter the bank name and account number.";
+      adminMessage.textContent =
+        "Please enter the bank name and account number.";
       return;
     }
 
-    const details = { name, email, department, salary, payMethod, bankName, accountNo };
+    const details = {
+      name,
+      email,
+      department,
+      salary,
+      payMethod,
+      bankName,
+      accountNo,
+    };
 
     if (editId) {
-      const employee = users.find(user => user.id === editId);
+      const employee = users.find((user) => user.id === editId);
       Object.assign(employee, details);
       if (password) Auth.setPassword(employee, password);
       adminMessage.textContent = "Employee updated.";
@@ -256,37 +277,42 @@ if (document.getElementById("employeeForm") && requireRole("admin")) {
     renderEmployees(searchInput.value);
   });
 
-  document.getElementById("helperForm").addEventListener(
-    "submit", event => {
-      event.preventDefault();
+  document.getElementById("helperForm").addEventListener("submit", (event) => {
+    event.preventDefault();
 
-      const question = document.getElementById("helperQuestion")
-        .value.toLowerCase();
+    const question = document
+      .getElementById("helperQuestion")
+      .value.toLowerCase();
 
-      const employees = getEmployees();
-      const records = Storage.get("hcm_attendance", [])
-        .filter(record => record.date === today);
+    const employees = getEmployees();
+    const records = Storage.get("hcm_attendance", []).filter(
+      (record) => record.date === today,
+    );
 
-      let answer = "Try asking how many employees we have, who is late, or who is on leave today.";
+    let answer =
+      "Try asking how many employees we have, who is late, or who is on leave today.";
 
-      if (question.includes("late")) {
-        const late = records.filter(record => record.status === "late" || record.late);
-        answer = late.length + " employee attendance record(s) are marked late today.";
-      } else if (question.includes("leave")) {
-        const leaves = Storage.get("hcm_leaves", []).filter(leave =>
+    if (question.includes("late")) {
+      const late = records.filter(
+        (record) => record.status === "late" || record.late,
+      );
+      answer =
+        late.length + " employee attendance record(s) are marked late today.";
+    } else if (question.includes("leave")) {
+      const leaves = Storage.get("hcm_leaves", []).filter(
+        (leave) =>
           leave.status === "approved" &&
           leave.from <= today &&
-          leave.to >= today
-        );
+          leave.to >= today,
+      );
 
-        answer = leaves.length + " approved leave request(s) cover today.";
-      } else if (question.includes("employee")) {
-        answer = "Your company has " + employees.length + " employees.";
-      }
-
-      document.getElementById("helperAnswer").textContent = answer;
+      answer = leaves.length + " approved leave request(s) cover today.";
+    } else if (question.includes("employee")) {
+      answer = "Your company has " + employees.length + " employees.";
     }
-  );
+
+    document.getElementById("helperAnswer").textContent = answer;
+  });
 
   setMode();
   renderEmployees();

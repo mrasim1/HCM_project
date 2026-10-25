@@ -15,7 +15,7 @@ const Storage = {
 
   remove(key) {
     localStorage.removeItem(key);
-  }
+  },
 };
 
 // Password hashing (SHA-256, works on file:// and http://).
@@ -27,7 +27,12 @@ const Auth = {
     const maxWord = Math.pow(2, 32);
     const words = [];
     const bitLength = ascii.length * 8;
-    let hash = [], k = [], primes = 0, i, j, result = "";
+    let hash = [],
+      k = [],
+      primes = 0,
+      i,
+      j,
+      result = "";
     const composite = {};
 
     for (let c = 2; primes < 64; c++) {
@@ -39,29 +44,39 @@ const Auth = {
     }
 
     ascii += "\x80";
-    while (ascii.length % 64 - 56) ascii += "\x00";
+    while ((ascii.length % 64) - 56) ascii += "\x00";
 
     for (i = 0; i < ascii.length; i++) {
-      words[i >> 2] |= ascii.charCodeAt(i) << ((3 - i) % 4) * 8;
+      words[i >> 2] |= ascii.charCodeAt(i) << (((3 - i) % 4) * 8);
     }
     words[words.length] = (bitLength / maxWord) | 0;
     words[words.length] = bitLength;
 
-    for (j = 0; j < words.length;) {
-      const w = words.slice(j, j += 16);
+    for (j = 0; j < words.length; ) {
+      const w = words.slice(j, (j += 16));
       const old = hash;
       hash = hash.slice(0, 8);
 
       for (i = 0; i < 64; i++) {
-        const w15 = w[i - 15], w2 = w[i - 2];
-        const a = hash[0], e = hash[4];
-        const t1 = hash[7] +
+        const w15 = w[i - 15],
+          w2 = w[i - 2];
+        const a = hash[0],
+          e = hash[4];
+        const t1 =
+          hash[7] +
           (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) +
-          ((e & hash[5]) ^ (~e & hash[6])) + k[i] +
-          (w[i] = i < 16 ? w[i] : (w[i - 16] +
-            (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] +
-            (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
-        const t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) +
+          ((e & hash[5]) ^ (~e & hash[6])) +
+          k[i] +
+          (w[i] =
+            i < 16
+              ? w[i]
+              : (w[i - 16] +
+                  (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) +
+                  w[i - 7] +
+                  (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) |
+                0);
+        const t2 =
+          (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) +
           ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
 
         hash = [(t1 + t2) | 0].concat(hash);
@@ -93,5 +108,5 @@ const Auth = {
   setPassword(user, password) {
     user.passwordHash = Auth.hash(user.id, password);
     delete user.password;
-  }
+  },
 };

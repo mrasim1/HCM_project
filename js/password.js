@@ -5,11 +5,11 @@
   const msg = document.getElementById("passwordMessage");
   const session = Storage.get("hcm_session");
 
-  form.addEventListener("submit", event => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const users = Storage.get("hcm_users", []);
-    const user = session && users.find(u => u.id === session.userId);
+    const user = session && users.find((u) => u.id === session.userId);
 
     const current = document.getElementById("curPass").value;
     const next = document.getElementById("newPass").value;

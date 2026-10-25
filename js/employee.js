@@ -7,12 +7,9 @@ function getLocalDate() {
   return `${year}-${month}-${day}`;
 }
 
-if (
-  document.getElementById("checkInBtn") &&
-  requireRole("employee")
-) {
+if (document.getElementById("checkInBtn") && requireRole("employee")) {
   const currentUser = Storage.get("hcm_users", []).find(
-    user => user.id === session.userId
+    (user) => user.id === session.userId,
   );
 
   const company = Storage.get("hcm_company", {});
@@ -26,7 +23,7 @@ if (
 
   function getMyRecords() {
     return Storage.get("hcm_attendance", []).filter(
-      record => record.employeeId === currentUser.id
+      (record) => record.employeeId === currentUser.id,
     );
   }
 
@@ -34,7 +31,7 @@ if (
     const records = getMyRecords();
     const today = getLocalDate();
 
-    const record = records.find(item => item.date === today);
+    const record = records.find((item) => item.date === today);
 
     if (!record) {
       statusText.textContent = "You have not checked in today.";
@@ -42,9 +39,12 @@ if (
       checkOutBtn.disabled = true;
     } else {
       statusText.textContent =
-        "Check-in: " + record.checkIn +
-        " | Check-out: " + (record.checkOut || "Not checked out") +
-        " | Status: " + record.status;
+        "Check-in: " +
+        record.checkIn +
+        " | Check-out: " +
+        (record.checkOut || "Not checked out") +
+        " | Status: " +
+        record.status;
 
       checkInBtn.disabled = true;
       checkOutBtn.disabled = !record.checkIn || Boolean(record.checkOut);
@@ -52,18 +52,21 @@ if (
 
     historyBox.replaceChildren();
 
-    records.sort((a, b) => b.date.localeCompare(a.date))
-      .forEach(item => {
+    records
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .forEach((item) => {
         const row = document.createElement("p");
-        row.textContent =
-          `${item.date} | In: ${item.checkIn} | Out: ${
-            item.checkOut || "—"
-          } | ${item.status}`;
+        row.textContent = `${item.date} | In: ${item.checkIn} | Out: ${
+          item.checkOut || "—"
+        } | ${item.status}`;
 
-        row.className = "rec " + (
-          item.status === "late" ? "late" :
-          item.status === "half day" ? "half" : "present"
-        );
+        row.className =
+          "rec " +
+          (item.status === "late"
+            ? "late"
+            : item.status === "half day"
+              ? "half"
+              : "present");
         historyBox.append(row);
       });
 
@@ -76,10 +79,12 @@ if (
     const records = Storage.get("hcm_attendance", []);
     const today = getLocalDate();
 
-    if (records.some(record =>
-      record.employeeId === currentUser.id &&
-      record.date === today
-    )) {
+    if (
+      records.some(
+        (record) =>
+          record.employeeId === currentUser.id && record.date === today,
+      )
+    ) {
       statusText.textContent = "You have already checked in today.";
       return;
     }
@@ -87,16 +92,15 @@ if (
     const now = new Date();
     const time = now.toTimeString().slice(0, 5);
 
-    const [startHour, startMinute] =
-      (company.officeStart || "09:00").split(":").map(Number);
+    const [startHour, startMinute] = (company.officeStart || "09:00")
+      .split(":")
+      .map(Number);
 
     const startMinutes = startHour * 60 + startMinute;
     const grace = Number(company.graceMinutes || 0);
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-    const status = currentMinutes > startMinutes + grace
-      ? "late"
-      : "present";
+    const status = currentMinutes > startMinutes + grace ? "late" : "present";
 
     records.push({
       id: Date.now(),
@@ -105,7 +109,7 @@ if (
       checkIn: time,
       checkOut: "",
       status,
-      late: status === "late"
+      late: status === "late",
     });
 
     Storage.set("hcm_attendance", records);
@@ -116,9 +120,8 @@ if (
     const records = Storage.get("hcm_attendance", []);
     const today = getLocalDate();
 
-    const record = records.find(item =>
-      item.employeeId === currentUser.id &&
-      item.date === today
+    const record = records.find(
+      (item) => item.employeeId === currentUser.id && item.date === today,
     );
 
     if (!record || !record.checkIn || record.checkOut) {
@@ -147,43 +150,42 @@ if (
     renderAttendance();
   });
 
-  document.getElementById("employeeHelperForm").addEventListener(
-    "submit", event => {
+  document
+    .getElementById("employeeHelperForm")
+    .addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const question = document.getElementById("employeeQuestion")
+      const question = document
+        .getElementById("employeeQuestion")
         .value.toLowerCase();
 
       const records = getMyRecords();
       const today = getLocalDate();
-      const todayRecord = records.find(item => item.date === today);
+      const todayRecord = records.find((item) => item.date === today);
 
       let answer = "Try asking: Was I late today?";
 
       if (question.includes("late")) {
         answer = todayRecord
-          ? (todayRecord.status === "late"
-              ? "Your attendance is marked late today."
-              : "Your attendance is not marked late today.")
+          ? todayRecord.status === "late"
+            ? "Your attendance is marked late today."
+            : "Your attendance is not marked late today."
           : "No attendance record exists for today.";
       } else if (question.includes("hour")) {
         const weekStart = new Date();
         weekStart.setDate(weekStart.getDate() - 6);
 
         const total = records
-          .filter(item => item.date >= getDateString(weekStart))
+          .filter((item) => item.date >= getDateString(weekStart))
           .reduce((sum, item) => sum + (item.hoursWorked || 0), 0);
 
-        answer = "Recorded hours over the last 7 days: " +
-          total.toFixed(2);
+        answer = "Recorded hours over the last 7 days: " + total.toFixed(2);
       } else if (question.includes("attendance")) {
-        answer = "You have " + records.length +
-          " attendance record(s).";
+        answer = "You have " + records.length + " attendance record(s).";
       }
 
       document.getElementById("employeeAnswer").textContent = answer;
-    }
-  );
+    });
 
   function getDateString(date) {
     const y = date.getFullYear();

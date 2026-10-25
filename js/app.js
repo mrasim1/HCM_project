@@ -1,4 +1,3 @@
-
 const setupForm = document.getElementById("setupForm");
 const loginForm = document.getElementById("loginForm");
 const message = document.getElementById("message");
@@ -13,8 +12,10 @@ function showMessage(text, type = "") {
   const active = Storage.get("hcm_session");
   const users = Storage.get("hcm_users", []);
 
-  if (active && users.some(user => user.id === active.userId)) {
-    window.location.replace(active.role === "admin" ? "admin.html" : "employee.html");
+  if (active && users.some((user) => user.id === active.userId)) {
+    window.location.replace(
+      active.role === "admin" ? "admin.html" : "employee.html",
+    );
   }
 })();
 
@@ -35,17 +36,16 @@ function initializeApp() {
 setupForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const companyName =
-    document.getElementById("companyName").value.trim();
+  const companyName = document.getElementById("companyName").value.trim();
 
-  const adminName =
-    document.getElementById("adminName").value.trim();
+  const adminName = document.getElementById("adminName").value.trim();
 
-  const adminEmail =
-    document.getElementById("adminEmail").value.trim().toLowerCase();
+  const adminEmail = document
+    .getElementById("adminEmail")
+    .value.trim()
+    .toLowerCase();
 
-  const adminPassword =
-    document.getElementById("adminPassword").value;
+  const adminPassword = document.getElementById("adminPassword").value;
 
   if (!companyName || !adminName || !adminEmail || !adminPassword) {
     showMessage("Please complete every field.", "error");
@@ -59,7 +59,7 @@ setupForm.addEventListener("submit", function (event) {
 
   const users = Storage.get("hcm_users", []);
 
-  if (users.some(user => user.email === adminEmail)) {
+  if (users.some((user) => user.email === adminEmail)) {
     showMessage("This email is already registered.", "error");
     return;
   }
@@ -70,7 +70,7 @@ setupForm.addEventListener("submit", function (event) {
     email: adminEmail,
     role: "admin",
     department: "Management",
-    salary: 0
+    salary: 0,
   };
 
   Auth.setPassword(admin, adminPassword);
@@ -81,7 +81,7 @@ setupForm.addEventListener("submit", function (event) {
     graceMinutes: 15,
     leaveQuota: 20,
     latesPerDeduction: 0,
-    workingDays: [1, 2, 3, 4, 5]
+    workingDays: [1, 2, 3, 4, 5],
   });
 
   Storage.set("hcm_users", [...users, admin]);
@@ -93,26 +93,21 @@ setupForm.addEventListener("submit", function (event) {
   setupForm.reset();
   initializeApp();
 
-  showMessage(
-    "Company created successfully! Please log in.",
-    "success"
-  );
+  showMessage("Company created successfully! Please log in.", "success");
 });
 
 // Login for Admin or Employee
 loginForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const email =
-    document.getElementById("email").value.trim().toLowerCase();
+  const email = document.getElementById("email").value.trim().toLowerCase();
 
-  const password =
-    document.getElementById("password").value;
+  const password = document.getElementById("password").value;
 
   const users = Storage.get("hcm_users", []);
 
   const user = users.find(
-    item => item.email === email && Auth.verify(item, password)
+    (item) => item.email === email && Auth.verify(item, password),
   );
 
   if (!user) {
@@ -128,7 +123,7 @@ loginForm.addEventListener("submit", function (event) {
 
   Storage.set("hcm_session", {
     userId: user.id,
-    role: user.role
+    role: user.role,
   });
 
   if (user.role === "admin") {
